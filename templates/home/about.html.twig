@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}A propos{% endblock %}
+  
+{% block body %}
+  <h1>{{ app_name }}</h1>
+<div style="text-align: center; margin-top: 100px; font-family: sans-serif;">
+    <h1>À propos de {{ app_name }}</h1>
+    <p>{{ app_name }} est une application de gestion de bibliothèque développée avec Symfony 8.0.</p>
+    <p>Elle permet de gérer des livres, des auteurs, des catégories et des emprunts.</p>
+</div>
+{% endblock %}
