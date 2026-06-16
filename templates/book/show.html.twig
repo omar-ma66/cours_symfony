@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Bibliotech {% endblock %}
+
+{% block stylesheets %} {% endblock %}
+
+{% block body %}
+
+            <div style="max-width:800px;margin:50px auto; border:1px solid gray;padding :2em;border-radius:10px ;box-shadow:0 0 12px gray">
+
+                    <h1> {{ book.title}} </h1>
+                    <p> <strong> Auteur </strong> {{ book.author}} </p>
+                    <p> <strong> Description </strong> {{ book.description}} </p>
+                    <p> <strong> ID du livre </strong> {{ book.id}} </p>
+
+                    <a href=" {{ path('app_book_index') }}"> retour a la liste </a>
+
+            </div>
+
+{% endblock %}
