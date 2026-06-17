@@ -266,5 +266,24 @@ final class BookController extends AbstractController
          ]);
     }
 
+    // ---------------------------------------------------------------------------------------
+
+    #[route('/livres/titre/{slug}',name:'app_titre_book')]
+    public function byTitre(string $slug,BookRepository $bookRepository,AuthorRepository $authorRepository):Response
+    {
+        
+         $auteur =   $authorRepository->find(1) ;
+        $livres  = $bookRepository->findBy(['author'=>$auteur],['title'=>'ASC']);
+        $book = $bookRepository->findOneBy(['title'=>$slug],['id'=>'ASC']);
+
+    //    dd($book,$auteur,$livres);
+                if(!$book)
+                    throw $this->createNotFoundException('pas de livre avec ce titre trouver');
+
+        return $this->redirectToRoute('app_book_show',['id'=>$book->getId()]);
+    }
+
+    // ---------------------------------------------------------------------------------------
+// php bin/console dbal:run-sql "SELECT * FROM book WHERE title = 'Mon Beau Livre'"
 
 }
