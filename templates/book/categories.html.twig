@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block title %}Bibliotech {% endblock %}
+
+
+
+{% block body %}
+        <h1> nombre de livre(s) {{ livres|length}} disponible(s) </h1>
+
+                          
+                                    <p>liste pour cette categorie : {{categories.name }} </p>
+
+                                    <p>nombre de livre trouvé {{livres|length}} </p> 
+                      
+
+                <ul>
+                        {% for livre in livres %}
+
+                                <li>
+                                       <a href="{{ path('app_book_show',{id: livre.id})}}"> detail du livre</a><strong>{{livre.title}}</strong><span>{{livre.author.firstname}}</span> | <span>{{livre.author.lastname}}</span>
+                                        
+                                        {% for categorie in livre.categories %}
+                                           <span> --{{categorie.name}}--</span>  
+                                        {% endfor %}
+                                      
+                                </li>
+
+                        {% else %}
+                                <p> pas de  livre disponible  </p>
+                          
+                        {% endfor %}
+
+<a href="{{path('app_book_index') }}"> &#8592; Retour a la liste</a>
+{% endblock %}

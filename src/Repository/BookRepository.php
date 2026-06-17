@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Book;
+use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,19 @@ class BookRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+       
+   public function mafunc(Category $category):array
+           {
+                    return $this->createQueryBuilder('b')
+                            ->join('b.categories','bc')
+                            ->andWhere('bc =  :category')
+                            ->setParameter('category',$category)
+                            ->orderBy("b.title","ASC")
+                            ->getQuery()
+                            ->getResult();
+           } 
+
+
+
 }

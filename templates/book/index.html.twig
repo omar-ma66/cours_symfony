@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %}
 
 {% block title %}Bibliotech — Nos livres{% endblock %}
 
@@ -13,7 +13,7 @@
 {% block body %}
 <div style="max-width: 800px; margin: 50px auto; font-family: sans-serif;">
     <h1>📚 Nos livres</h1>
-    <p>Nombre de livres : {{ books|length }}</p>
+    <p>Nombre de livre(s) : {{ books|length } disponible(s)}</p>
 
 {% set disponible = 0 %}
 
@@ -37,4 +37,33 @@
         {% endfor %}
     </ul>
 </div>
+{% endblock %} #}
+
+
+
+{# """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" #}
+
+
+{%  extends 'base.html.twig' %}
+{% block title %}Bibliotech  {% endblock %}
+
+
+{% block body %}
+
+                <h1> livre(s) disponible {{ books|length }}</h1>
+
+
+                <ul>
+                        {% for book in books %}
+                        <li>
+                         <a href="{{ path('app_book_show',{id: book.id}) }}">{{ book.title}}</a><strong>------- {{ book.author.firstname}}</strong><strong>{{book.author.lastname}}</strong> <strong> Stock : {{book.stock}}</sctrong>       
+                        </li>
+
+                        {% else %}
+                                <p> pas de livre disponible </p>
+                        {% endfor %}
+
+                </ul>
+
+
 {% endblock %}

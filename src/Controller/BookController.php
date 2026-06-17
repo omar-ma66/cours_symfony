@@ -6,6 +6,7 @@ use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Category;
 use App\Repository\AuthorRepository;
+use App\Repository\BookRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,6 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class BookController extends AbstractController
 {
 
+// ----------------------------------------------------------------------------------------------
 
     #[Route('/livres/test/{id}', name: 'app_test_relation', requirements: ['id' => '\d+'])]
     public function affiche(AuthorRepository $authorRepository, Author $author,int $id): Response
@@ -47,6 +49,7 @@ final class BookController extends AbstractController
 
         // return new Response($out);
     }
+// ----------------------------------------------------------------------------------------------
 
     #[Route('/livres/ajout', name: 'app_book_add')]
     public function add(EntityManagerInterface $em, CategoryRepository $categoryRepository)
@@ -88,6 +91,7 @@ final class BookController extends AbstractController
 
         return new Response("Livres ajoutes avec succes");
     }
+// ----------------------------------------------------------------------------------------------
 
     #[Route('/livres/init', name: 'app_book_init')]
     public function init(EntityManagerInterface $em)
@@ -160,19 +164,13 @@ final class BookController extends AbstractController
         return new Response("Les Données sont enregistrées ");
     }
 
-
+// ----------------------------------------------------------------------------------------------
 
     #[route('/livres', name: 'app_book_index')]
-    public function index(): Response
+    public function index(BookRepository $bookRepository): Response
     {
 
-        $books = [
-            ['title' => 'Dune', 'author' => 'Frank Herbert', 'dispo' => 'oui'],
-            ['title' => '1984', 'author' => 'George Orwell', 'dispo' => 'non'],
-            ['title' => 'Fondation', 'author' => 'Isaac Asimov', 'dispo' => 'oui'],
-            ['title' => 'Le Petit Prince', 'author' => 'Antoine de Saint-Exupéry', 'dispo' => 'non'],
-            ['title' => 'Harry Potter', 'author' => 'JK Rowling', 'dispo' => 'oui'],
-        ];
+        $books =$bookRepository->findAll();
 
         return $this->render('book/index.html.twig', [
             'controller_name' => 'BookController',
@@ -182,20 +180,22 @@ final class BookController extends AbstractController
     // ---------------------------------------------------------------------------------------
 
     #[route('/livres/{id}', name: 'app_book_show', requirements: ['id' => '\d{1,4}'], methods: ['GET', 'POST'])]
-    public function show(int $id): Response
+    public function show(int $id,BookRepository $bookRepository): Response
     {
-        $book = [
-            'id' => $id,
-            'title' => 'Livre n° ' . $id,
-            'author' => 'Auteur inconnu',
-            'description' => 'Un livre passionnant de notre bibliotheque.'
-        ];
-
+      
+    $book = $bookRepository->find($id);
+                if(!$book)
+                    {
+                       throw $this->createNotFoundException("Le livre num $id n'existe pas ");
+                    }
         return $this->render('book/show.html.twig', [
             'book' => $book,
         ]);
     }
     // ---------------------------------------------------------------------------------------
+
+    // ---------------------------------------------------------------------------------------
+
 
     #[route('/livres/page/{page}', name: 'app_book_list', requirements: ['page' => '\d+'], methods: ['GET'])]
     public function list(int $page = 1): Response
@@ -213,13 +213,25 @@ final class BookController extends AbstractController
     }
     // ---------------------------------------------------------------------------------------
 
-    #[route('categorie/{categorie}/livre/{id}', name: 'app_book_by_category')]
+    #[route('/categorie/{categorie}/livre/{id}', name: 'app_book_by_category')]
     public function showByCategory(string $categorie, int $id): Response
     {
 
         return new Response("vous avez choisi la catégorie [ $categorie ] numero de livre [$id]");
     }
     // ---------------------------------------------------------------------------------------
+     // ---------------------------------------------------------------------------------------
 
+     #[route('/livres/categories/{id}',name:'app_select_categorie')]
+    public function bycategories(int $id,CategoryRepository $categoryRepository,BookRepository $bookRepository)
+    {
+             $mycategory =   $categoryRepository->find($id);
+                       
+                $livres= $bookRepository->mafunc(  $mycategory );
+
+               return $this->render('book/categories.html.twig',['livres'=>$livres,'categories'=>$mycategory]);
+    }
+    // ---------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------
 
 }
