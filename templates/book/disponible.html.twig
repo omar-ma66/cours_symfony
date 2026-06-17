@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bibliotech {% endblock %}
+
+
+{% block body %}
+
+                    <h1>Livre(s) avec un stock suppérieur à {{ taille }} </h1>
+
+
+                    {% if books|length > 0 %}
+                        <h2>Nombre de livre disponible {{ books|length }}</h2>
+
+                                  <h2> Liste des livre(s) </h2>
+
+                                  
+                                        {% for book in books %}
+                                            <ul>
+                                                    <li> {{book.title}} </li>
+                                                    <li> {{book.stock}} </li>
+                                            </ul>
+                                        {% endfor %}
+
+
+                     {% else %}
+                        <p> pas de livre disponible </p>   
+                    {% endif %}    
+
+{% endblock %}

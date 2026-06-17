@@ -236,8 +236,10 @@ final class BookController extends AbstractController
     public function dispo(int $id,BookRepository $bookRepository)
     {
             $books = $bookRepository->findbyStock($id);
-            dd($books);
-
+         
+                      if(!$books)
+                        throw $this->createNotFoundException("Aucun livre trouvé");
+             return $this->render('book/disponible.html.twig',['books'=>$books ,"taille"=>$id]);       
     }
 
     // ---------------------------------------------------------------------------------------
