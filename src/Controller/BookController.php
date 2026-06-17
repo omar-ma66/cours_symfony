@@ -167,14 +167,14 @@ final class BookController extends AbstractController
 // ----------------------------------------------------------------------------------------------
 
     #[route('/livres', name: 'app_book_index')]
-    public function index(BookRepository $bookRepository): Response
+    public function index(BookRepository $bookRepository,CategoryRepository $categoryRepository): Response
     {
-
+        $categories  = $categoryRepository->findAll();
         $books =$bookRepository->findAll();
 
         return $this->render('book/index.html.twig', [
-            'controller_name' => 'BookController',
             'books' => $books,
+            'categories'=>$categories
         ]);
     }
     // ---------------------------------------------------------------------------------------
@@ -232,6 +232,14 @@ final class BookController extends AbstractController
                return $this->render('book/categories.html.twig',['livres'=>$livres,'categories'=>$mycategory]);
     }
     // ---------------------------------------------------------------------------------------
+    #[route('/livres/disponible/{id}',name:'app_book_disponible')]
+    public function dispo(int $id,BookRepository $bookRepository)
+    {
+            $books = $bookRepository->findbyStock($id);
+            dd($books);
+
+    }
+
     // ---------------------------------------------------------------------------------------
 
 }

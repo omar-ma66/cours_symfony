@@ -43,7 +43,7 @@
 
 {# """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" #}
 
-
+{# 
 {%  extends 'base.html.twig' %}
 {% block title %}Bibliotech  {% endblock %}
 
@@ -66,4 +66,50 @@
                 </ul>
 
 
+{% endblock %} #}
+
+
+{% extends 'base.html.twig' %}
+{% block title %}Bibliotech {% endblock %}
+
+{% block body %}
+                           <h1> nous avons trouver {{books|length }} et nous avons {{ categories|length}} categorie(s) </h1> 
+
+                                <h2 style="background-color:gray;padding:6px ">les catégories</h2>
+
+                                                {% for categorie in categories %}
+
+                                                          <p style="text-decoration:underline ;font-weight:bold ;font-style:italic">  {{categorie.name}} </p>      
+                                                {% else %}
+                                                <p> rien </p>
+
+                                                {% endfor %}
+
+{# ----------------------------------------------------------------------------------------------------------------------------- #}
+                                           
+                                               {% for livre in books %} 
+                                                        <ul style="list-style-type:none;border:1px solid gray;margin-bottom:5px;box-shadow:0 0 6px black;padding:20px;border-radius:10px">  
+                                                                <li>
+                                                                <span> Titre du livre</span> <strong>{{livre.title}}</strong>     
+                                                                </li> 
+                                                                <li>
+                                                                <span> Auteur</span>  <strong>{{livre.author.firstname}}</strong> <strong>{{livre.author.lastname}}</strong>    
+                                                                </li>
+                                                                <li>
+                                                                <span>Stock</span> <strong>{{livre.stock}}</sttrong>
+                                                                </li>
+                                                                <li>       
+                                                                <a href="{{ path('app_book_show',{id: livre.id}) }}">voire le détail du livre </a>
+                                                                </li> </ul>
+                                                        {% else %}
+                                                        <p> pas de livre pour le moment </p>
+                                                       
+                                               {% endfor %}
+                                      
+{# ----------------------------------------------------------------------------------------------------------------------------- #}
+
+
 {% endblock %}
+
+
+

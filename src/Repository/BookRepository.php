@@ -54,6 +54,14 @@ class BookRepository extends ServiceEntityRepository
                             ->getResult();
            } 
 
-
+  public function findbyStock(int $i)
+  {
+            return $this->createQueryBuilder('b')
+                       ->andWhere('b.stock > :i')
+                       ->setParameter('i',$i)
+                       ->orderBy('b.title','ASC')
+                       ->getQuery()
+                       ->getResult();
+  }     
 
 }
