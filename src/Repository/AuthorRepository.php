@@ -40,4 +40,16 @@ class AuthorRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function getAuth():array
+    {
+         $con =   $this->getEntityManager()->getConnection();
+
+         $req ="SELECT first_name,last_name FROM author where id > :id";
+
+         $resultat = $con->executeQuery($req,['id'=> 0]);
+
+        return $resultat->fetchAllAssociative() ;
+
+    }
 }

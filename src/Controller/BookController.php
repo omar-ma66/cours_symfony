@@ -22,10 +22,10 @@ final class BookController extends AbstractController
     {
 
           $auteur =    $authorRepository->find($id);
-
+                        
           dd($auteur->getFirstName(),$auteur->getBooks()->toArray()[0]->getTitle());
 
-
+                            $auteur->delete();
         // $books = $author->getBooks()->toArray();
         // // dd($author,$books);
         // //dd($books[0]->getCategories()[0]->getName());
