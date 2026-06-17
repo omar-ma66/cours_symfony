@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -62,6 +63,19 @@ class BookRepository extends ServiceEntityRepository
                        ->orderBy('b.title','ASC')
                        ->getQuery()
                        ->getResult();
-  }     
+  }    
+  
+  public function findByAuteur(Author $author)
+  {
+
+                return $this->createQueryBuilder('b')
+                      ->join('b.author','a')
+                      ->andWhere('a =  :author')
+                      ->setParameter('author',$author)
+                      ->orderBy('b.title','ASC')
+                      ->getQuery()
+                      ->getResult();
+
+  }
 
 }

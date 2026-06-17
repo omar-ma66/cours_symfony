@@ -79,7 +79,9 @@
 
                                                 {% for categorie in categories %}
 
-                                                          <p style="text-decoration:underline ;font-weight:bold ;font-style:italic">  {{categorie.name}} </p>      
+                                                          <p style="text-decoration:underline ;font-weight:bold ;font-style:italic">  
+                                                          <a href="{{ path('app_select_categorie',{id: categorie.id})}}">{{categorie.name}} </a> </p>    
+
                                                 {% else %}
                                                 <p> rien </p>
 

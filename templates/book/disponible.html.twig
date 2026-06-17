@@ -1,8 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Bibliotech {% endblock %}
-
-
+   
+   
+ {% block stylesheets %}  
+   
+    {{  parent() }}
+    <style>
+ul{
+    list-style-type:none;
+    border:1px solid gray;
+    padding :16px;
+    box-shadow : 0 0 10px black;
+    border-radius:10px
+    
+}
+    </style>
+{% endblock %}
 {% block body %}
 
                     <h1>Livre(s) avec un stock suppérieur à {{ taille }} </h1>

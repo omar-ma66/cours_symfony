@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\EventListener\ValidateRequestListener;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class BookController extends AbstractController
@@ -243,5 +244,27 @@ final class BookController extends AbstractController
     }
 
     // ---------------------------------------------------------------------------------------
+    #[route('/auteur/{id}/livres',name:'app_book_by_author',requirements:['id'=>'\d+'])]
+    public function findAuteur(int $id,BookRepository $bookRepository ,AuthorRepository $authorRepository)
+    {
+  
+        $auteur = $authorRepository->find($id);
+
+  
+        if(!$auteur)
+            throw $this->createNotFoundException("l'auteur n'est pas trouver");
+
+        $books = $bookRepository->findByAuteur($auteur);
+       
+         if(!$books)
+            throw $this->createNotFoundException("pas de livre trouver");
+        
+        return  $this->render('book/auteur.html.twig',  
+         [
+            "auteur"=>$auteur,
+            "livres"=>$books
+         ]);
+    }
+
 
 }

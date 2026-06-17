@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bibliotech {% endblock %} 
+
+{# auteur et livres #}
+
+{% block body %}
+
+                    <h1> {{ livres|length}} Livre(s) trouver en fonction de l'auteur {{ auteur.firstname}} {{auteur.lastname}} <h1>
+
+                                {% if livres|length > 0 %}
+                                    {% for livre in livres %}
+
+                                            <ul>
+                                                    <li> {{livre.title}} </li>
+
+                                            </ul>
+
+                                    {% else %}
+                                            <p> pas de livre pour l'instant </p>
+                                       {% endfor %}     
+                                    {% endif %}
+{% endblock %}

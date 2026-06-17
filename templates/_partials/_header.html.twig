@@ -4,7 +4,7 @@
        
                 <a href="{{ path('app_home') }}" style="color: white; margin-left: 20px; text-decoration: none; {% if app.current_route == 'app_home' %} font-weight: bold; text-decoration: underline;{% endif %} ">Accueil</a>
                 <a href="{{ path('app_book_index') }}" style="color: white; margin-left: 20px; text-decoration: none;  {% if app.current_route == 'app_book_index' %} font-weight: bold; text-decoration: underline;{% endif %} ">Livres</a>
-                <a href="{{ path('app_book_show',{id: 42} ) }}" style="color: white; margin-left: 20px; text-decoration: none;  {% if app.current_route == 'app_book_show' %} font-weight: bold; text-decoration: underline;{% endif %} ">Voir le livre</a>
+                <a href="{{ path('app_book_show',{id: 1} ) }}" style="color: white; margin-left: 20px; text-decoration: none;  {% if app.current_route == 'app_book_show' %} font-weight: bold; text-decoration: underline;{% endif %} ">Voir le livre</a>
                 <a href="{{ path('app_about') }}" style="color: white; margin-left: 20px; text-decoration: none;  {% if app.current_route == 'app_about' %} font-weight: bold; text-decoration: underline;{% endif %} ">À propos</a>
             </nav>
         </header>
