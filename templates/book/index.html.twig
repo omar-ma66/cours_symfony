@@ -34,7 +34,15 @@
                                                                 <span>Stock</span> <strong>{{livre.stock}}</sttrong>
                                                                 </li>
                                                                 <li>       
-                                                                <a href="{{ path('app_book_show',{id: livre.id}) }}">voire  </a>|<a href="{{ path('app_book_edit',{id: livre.id}) }}">edit </a>
+                                                                <a href="{{ path('app_book_show',{id: livre.id}) }}">voire</a>|
+                                                                <a href="{{ path('app_book_edit',{id: livre.id}) }}">edit </a>|
+                                                                {# <a href="{{path('app_book_delete',{id:livre.id})  }}">Supprimer</a> #}
+
+                                                                <form method="POST" action="{{ path('app_book_delete',{id:livre.id})}}" onsubmit="return confirm(''es tu sur de vouloir supprimer {{livre.title}})">
+                                                                  <input type="hidden" name="_token" value="{{csrf_token('delete-book-'~ livre.id )}}">                      
+                                                                   <button type="submit">Supprimer</button>
+                                                                </form>
+
                                                                 </li> </ul>
                                                         {% else %}
                                                         <p> pas de livre pour le moment </p>
