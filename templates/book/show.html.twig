@@ -16,8 +16,19 @@
                                 {% for categorie in book.categories %}
                                         <p><strong> Categorie </strong>  {{ categorie.name }} </p> 
                                 {% endfor %}
-                    <a href=" {{ path('app_book_index') }}"> retour a la liste </a>
+                    <a href=" {{ path('app_book_index') }}"> retour a la liste </a>|
+                    <a href=" {{ path('app_book_edit',{id: book.id}) }}"> modifier ce livre </a>
 
             </div>
+            <div>
+                        <form method="POST" action="{{ path('app_book_delete',{id: book.id}) }}"  onsubmit="return confirm('Es-tu sur de vouloir supprimer {{ book.title}}')">
+
+                             <input type="hidden" name="_token" value="{{ csrf_token('delete-book-'~ book.id)}}">       
+                             <button type='submit'>Supprimer</button>                    
+
+                        </form>
+
+            </div>    
+
 
 {% endblock %}

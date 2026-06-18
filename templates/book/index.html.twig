@@ -1,72 +1,5 @@
-{# {% extends 'base.html.twig' %}
-
-{% block title %}Bibliotech — Nos livres{% endblock %}
-
-{% block stylesheets %}
- {{ parent() }}
- <style>
-     h1 { color: #7d9ab8; }
-        .book-list { list-style: none; padding: 0; }
-</style>
-{% endblock %}
-
-{% block body %}
-<div style="max-width: 800px; margin: 50px auto; font-family: sans-serif;">
-    <h1>📚 Nos livres</h1>
-    <p>Nombre de livre(s) : {{ books|length } disponible(s)}</p>
-
-{% set disponible = 0 %}
-
-        {% if books|length > 0 %}
-                {% for book in books %}
-
-                        {% if book.dispo == "oui" %}
-                                {% set disponible = disponible + 1 %}                                
-                        {% endif %}
-                {% endfor  %}
-        {% else %} 
-                <p> Livre indisponible </p>       
-        {% endif %}
-
-    <ul style="list-style-type:none">
-
-<p> {{ disponible }} Livre(s) disponible sur {{ books|length }} </p>
-
-        {% for book in books %}
-                {{  include ('_partials/_book_card.html.twig',{book: book , index: loop.index} ) }}
-        {% endfor %}
-    </ul>
-</div>
-{% endblock %} #}
 
 
-
-{# """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" #}
-
-{# 
-{%  extends 'base.html.twig' %}
-{% block title %}Bibliotech  {% endblock %}
-
-
-{% block body %}
-
-                <h1> livre(s) disponible {{ books|length }}</h1>
-
-
-                <ul>
-                        {% for book in books %}
-                        <li>
-                         <a href="{{ path('app_book_show',{id: book.id}) }}">{{ book.title}}</a><strong>------- {{ book.author.firstname}}</strong><strong>{{book.author.lastname}}</strong> <strong> Stock : {{book.stock}}</sctrong>       
-                        </li>
-
-                        {% else %}
-                                <p> pas de livre disponible </p>
-                        {% endfor %}
-
-                </ul>
-
-
-{% endblock %} #}
 
 
 {% extends 'base.html.twig' %}
@@ -101,7 +34,7 @@
                                                                 <span>Stock</span> <strong>{{livre.stock}}</sttrong>
                                                                 </li>
                                                                 <li>       
-                                                                <a href="{{ path('app_book_show',{id: livre.id}) }}">voire le détail du livre </a>
+                                                                <a href="{{ path('app_book_show',{id: livre.id}) }}">voire  </a>|<a href="{{ path('app_book_edit',{id: livre.id}) }}">edit </a>
                                                                 </li> </ul>
                                                         {% else %}
                                                         <p> pas de livre pour le moment </p>
@@ -110,6 +43,7 @@
                                       
 {# ----------------------------------------------------------------------------------------------------------------------------- #}
 
+<a href="{{ path('app_book_new') }}">Ajouter un livre </a>
 
 {% endblock %}
 

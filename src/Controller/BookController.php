@@ -5,12 +5,14 @@ namespace App\Controller;
 use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Category;
+use App\Form\BookType;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\ValidateRequestListener;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,17 +20,17 @@ use Symfony\Component\Routing\Attribute\Route;
 final class BookController extends AbstractController
 {
 
-// ----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
 
     #[Route('/livres/test/{id}', name: 'app_test_relation', requirements: ['id' => '\d+'])]
-    public function affiche(AuthorRepository $authorRepository, Author $author,int $id): Response
+    public function affiche(AuthorRepository $authorRepository, Author $author, int $id): Response
     {
 
-          $auteur =    $authorRepository->find($id);
-                        
-          dd($auteur->getFirstName(),$auteur->getBooks()->toArray()[0]->getTitle());
+        $auteur =    $authorRepository->find($id);
 
-                            $auteur->delete();
+        dd($auteur->getFirstName(), $auteur->getBooks()->toArray()[0]->getTitle());
+
+        $auteur->delete();
         // $books = $author->getBooks()->toArray();
         // // dd($author,$books);
         // //dd($books[0]->getCategories()[0]->getName());
@@ -50,7 +52,7 @@ final class BookController extends AbstractController
 
         // return new Response($out);
     }
-// ----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
 
     #[Route('/livres/ajout', name: 'app_book_add')]
     public function add(EntityManagerInterface $em, CategoryRepository $categoryRepository)
@@ -92,7 +94,7 @@ final class BookController extends AbstractController
 
         return new Response("Livres ajoutes avec succes");
     }
-// ----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
 
     #[Route('/livres/init', name: 'app_book_init')]
     public function init(EntityManagerInterface $em)
@@ -165,30 +167,111 @@ final class BookController extends AbstractController
         return new Response("Les Données sont enregistrées ");
     }
 
-// ----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
 
     #[route('/livres', name: 'app_book_index')]
-    public function index(BookRepository $bookRepository,CategoryRepository $categoryRepository): Response
+    public function index(BookRepository $bookRepository, CategoryRepository $categoryRepository): Response
     {
         $categories  = $categoryRepository->findAll();
-        $books =$bookRepository->findAll();
+        $books = $bookRepository->findAll();
 
         return $this->render('book/index.html.twig', [
             'books' => $books,
-            'categories'=>$categories
+            'categories' => $categories
         ]);
+    }
+    // ---------------------------------------------------------------------------------------
+    #[route('/livres/find', name: 'app_livres_find')]
+    public function findBook(Request $request, BookRepository $bookRepository)
+    {
+        $data = $request->query->get('titre');
+        $livres = "";
+        if ($data)
+            $livres = $bookRepository->findbyletters($data);
+
+        return $this->render('book/find.html.twig', ['livres' => $livres]);
+    }
+    // ---------------------------------------------------------------------------------------
+    #[route('/livres/nouveau', name: 'app_book_new')]
+    public function new(Request $request, EntityManagerInterface $em)
+    {
+        $book = new Book();
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($book);
+            $em->flush();
+            $this->addFlash('succes', "Le Livre " . $book->getTitle() . " a ete ajouté avec succes");
+            return $this->redirectToRoute('app_book_show', ['id' => $book->getId()]);
+        }
+
+        return $this->render(
+            'book/new.html.twig',
+            ['form' => $form]
+        );
+    }
+    // ---------------------------------------------------------------------------------------
+    #[route('/livres/{id}/supprimer',name:'app_book_delete',requirements:['id'=>'\d+'],methods:['POST'])]
+    public function deleteBook(Book $book ,Request $request,EntityManagerInterface $em)
+    {
+            if(!$book)
+                {
+                    throw $this->createNotFoundException("ce livre n'existe pas ");
+                }
+
+           if($this->isCsrfTokenValid('delete-book-'.$book->getId(),$request->request->get('_token')))
+            {
+                $title = $book->getTitle();
+                $em->remove($book);
+                $em->flush();
+                $this->addFlash('succes' ,"Le livre ".$title ." a bien été suprimer ");
+                return $this->redirectToRoute('app_book_index');
+            }
+            else
+                $this->addFlash('erro' ,"jeton de securite invalide");
+
+            return $this->redirectToRoute('app_book_index');
+    }
+
+    // ---------------------------------------------------------------------------------------
+    #[route('/livres/{id}/modifier', name: 'app_book_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function edit(Book $book, Request $request, EntityManagerInterface $em)
+    {
+
+        if (!$book) {
+            throw $this->createNotFoundException('le livre est introuvable');
+        }
+
+
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            $this->addFlash('succes', "Le livre " . " " . $book->getTitle() . "   " . "a bien été modifié avec succes");
+            return $this->redirectToRoute('app_book_show', ['id' => $book->getId()]);
+        }
+
+        return $this->render(
+            'book/edit.html.twig',
+            [
+                'form' => $form,
+                'book' => $book
+            ]
+        );
     }
     // ---------------------------------------------------------------------------------------
 
     #[route('/livres/{id}', name: 'app_book_show', requirements: ['id' => '\d{1,4}'], methods: ['GET', 'POST'])]
-    public function show(int $id,BookRepository $bookRepository): Response
+    public function show(int $id, BookRepository $bookRepository): Response
     {
-      
-    $book = $bookRepository->find($id);
-                if(!$book)
-                    {
-                       throw $this->createNotFoundException("Le livre num $id n'existe pas ");
-                    }
+
+        $book = $bookRepository->find($id);
+        if (!$book) {
+            throw $this->createNotFoundException("Le livre num $id n'existe pas ");
+        }
         return $this->render('book/show.html.twig', [
             'book' => $book,
         ]);
@@ -221,69 +304,73 @@ final class BookController extends AbstractController
         return new Response("vous avez choisi la catégorie [ $categorie ] numero de livre [$id]");
     }
     // ---------------------------------------------------------------------------------------
-     // ---------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------
 
-     #[route('/livres/categories/{id}',name:'app_select_categorie')]
-    public function bycategories(int $id,CategoryRepository $categoryRepository,BookRepository $bookRepository)
+    #[route('/livres/categories/{id}', name: 'app_select_categorie')]
+    public function bycategories(int $id, CategoryRepository $categoryRepository, BookRepository $bookRepository)
     {
-             $mycategory =   $categoryRepository->find($id);
-                       
-                $livres= $bookRepository->mafunc(  $mycategory );
+        $mycategory =   $categoryRepository->find($id);
 
-               return $this->render('book/categories.html.twig',['livres'=>$livres,'categories'=>$mycategory]);
+        $livres = $bookRepository->mafunc($mycategory);
+
+        return $this->render('book/categories.html.twig', ['livres' => $livres, 'categories' => $mycategory]);
     }
     // ---------------------------------------------------------------------------------------
-    #[route('/livres/disponible/{id}',name:'app_book_disponible')]
-    public function dispo(int $id,BookRepository $bookRepository)
+    #[route('/livres/disponible/{id}', name: 'app_book_disponible')]
+    public function dispo(int $id, BookRepository $bookRepository)
     {
-            $books = $bookRepository->findbyStock($id);
-         
-                      if(!$books)
-                        throw $this->createNotFoundException("Aucun livre trouvé");
-             return $this->render('book/disponible.html.twig',['books'=>$books ,"taille"=>$id]);       
+        $books = $bookRepository->findbyStock($id);
+
+        if (!$books)
+            throw $this->createNotFoundException("Aucun livre trouvé");
+        return $this->render('book/disponible.html.twig', ['books' => $books, "taille" => $id]);
     }
 
     // ---------------------------------------------------------------------------------------
-    #[route('/auteur/{id}/livres',name:'app_book_by_author',requirements:['id'=>'\d+'])]
-    public function findAuteur(int $id,BookRepository $bookRepository ,AuthorRepository $authorRepository)
+    #[route('/auteur/{id}/livres', name: 'app_book_by_author', requirements: ['id' => '\d+'])]
+    public function findAuteur(int $id, BookRepository $bookRepository, AuthorRepository $authorRepository)
     {
-  
+
         $auteur = $authorRepository->find($id);
 
-  
-        if(!$auteur)
+
+        if (!$auteur)
             throw $this->createNotFoundException("l'auteur n'est pas trouver");
 
         $books = $bookRepository->findByAuteur($auteur);
-       
-         if(!$books)
+
+        if (!$books)
             throw $this->createNotFoundException("pas de livre trouver");
-        
-        return  $this->render('book/auteur.html.twig',  
-         [
-            "auteur"=>$auteur,
-            "livres"=>$books
-         ]);
+
+        return  $this->render(
+            'book/auteur.html.twig',
+            [
+                "auteur" => $auteur,
+                "livres" => $books
+            ]
+        );
     }
 
     // ---------------------------------------------------------------------------------------
 
-    #[route('/livres/titre/{slug}',name:'app_titre_book')]
-    public function byTitre(string $slug,BookRepository $bookRepository,AuthorRepository $authorRepository):Response
+    #[route('/livres/titre/{slug}', name: 'app_titre_book')]
+    public function byTitre(string $slug, BookRepository $bookRepository, AuthorRepository $authorRepository): Response
     {
-        
-         $auteur =   $authorRepository->find(1) ;
-        $livres  = $bookRepository->findBy(['author'=>$auteur],['title'=>'ASC']);
-        $book = $bookRepository->findOneBy(['title'=>$slug],['id'=>'ASC']);
 
-    //    dd($book,$auteur,$livres);
-                if(!$book)
-                    throw $this->createNotFoundException('pas de livre avec ce titre trouver');
+        $auteur =   $authorRepository->find(1);
+        $livres  = $bookRepository->findBy(['author' => $auteur], ['title' => 'ASC']);
+        $book = $bookRepository->findOneBy(['title' => $slug], ['id' => 'ASC']);
 
-        return $this->redirectToRoute('app_book_show',['id'=>$book->getId()]);
+        //    dd($book,$auteur,$livres);
+        if (!$book)
+            throw $this->createNotFoundException('pas de livre avec ce titre trouver');
+
+        return $this->redirectToRoute('app_book_show', ['id' => $book->getId()]);
     }
 
     // ---------------------------------------------------------------------------------------
-// php bin/console dbal:run-sql "SELECT * FROM book WHERE title = 'Mon Beau Livre'"
+    // php bin/console dbal:run-sql "SELECT * FROM book WHERE title = 'Mon Beau Livre'"
+
+
 
 }

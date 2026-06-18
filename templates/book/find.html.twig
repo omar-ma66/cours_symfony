@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bibliotech {% endblock %}
+
+{% block body %}
+
+                            <form action="{{ path('app_livres_find')}}" method="GET">
+
+                            <label for ="titreid"> </label> <input type="text" id="titreid" name="titre">
+                            
+                            <input type="submit" value="Chercher">
+
+                            </form>
+
+
+             
+
+                        {% if livres|length > 0 %}
+                        <h1> {{ livres|length }} livre(s) trouvés </h1>
+                                    
+                                    {%  for livre in livres %}
+                                            <ul>
+                                                <li>titre : {{livre.title}}</li>
+                                            </ul>
+                                     {% else %} 
+                                     <p> pas de livre </p>      
+                                    {% endfor %}
+
+                        {% else %}
+                                      <p> pas de livre <p>      
+                        {% endif %}                        
+                                        
+
+{% endblock %}

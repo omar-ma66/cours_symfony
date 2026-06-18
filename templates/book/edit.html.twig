@@ -1,0 +1,50 @@
+{% extends 'base.html.twig'%}
+{% block title %}Bibliotech {% endblock %}
+
+{% block body %}
+
+
+
+                <h1>Modifier : {{book.title}} </h1>
+
+                <a href="{{ path( 'app_book_show',{id: book.id} )}}">Retour au livre </a>
+<div  style="display:flex;flex-direction:column;margin:10px auto;border:1px solid black">
+                {{ form_start(form) }}
+
+                                     <div style="display:flex;justify-content:space-between:align-items:center;padding:10px ;margin:20px auto ;width:500px;">
+                                            {{form_label(form.title,null,{'label_attr':{'style':"margin-right:20px;display:inline-block;width:120px"}})}}
+                                            {{form_widget(form.title)}}
+                                            {{form_errors(form.title)}}
+                                     </div>       
+                                     
+                                     <div style="display:flex;justify-content:space-between:align-items:center;padding:10px ;margin:20px auto ;width:500px;">
+                                            {{form_label(form.author,null,{'label_attr':{'style':"margin-right:20px;display:inline-block;width:120px"}})}}
+                                            {{form_widget(form.author)}}
+                                            {{form_errors(form.author)}}
+                                     </div>   
+                                     
+                                     <div style="display:flex;justify-content:space-between:align-items:center;padding:10px ;margin:20px auto;width:500px;">
+                                            {{form_label(form.stock,null,{'label_attr':{'style':"margin-right:20px;display:inline-block;width:120px"}})}}
+                                            {{form_widget(form.stock)}}
+                                            {{form_errors(form.stock)}}
+                                     </div >       
+                                     
+                                     <div style="display:flex;justify-content:space-between:align-items:center;padding:10px ;margin:20px auto;width:500px;">
+                                            {{form_label(form.categories,null,{'label_attr':{'style':"margin-right:20px;display:inline-block;width:120px"}})}}
+                                            {{form_widget(form.categories)}}
+                                            {{form_errors(form.categories)}}
+                                     </div>           
+                                    <div style="display:flex;justify-content:space-between:align-items:center;padding:10px ;margin:20px auto;width:500px;">
+                                            {{form_label(form.description,null,{'label_attr':{'style':"margin-right:20px;display:inline-block;width:120px"}})}}
+                                            {{form_widget(form.description)}}
+                                            {{form_errors(form.description)}}
+                                     </div>           
+                                       <div style="display:flex;justify-content:space-between:align-items:center;padding:10px ;margin:20px auto;width:500px;">
+                                            {{form_label(form.isbn,null,{'label_attr':{'style':"margin-right:20px;display:inline-block;width:120px"}})}}
+                                            {{form_widget(form.isbn)}}
+                                            {{form_errors(form.isbn)}}
+                                     </div>           
+
+                {{ form_end(form)}}
+</div>
+{% endblock %}

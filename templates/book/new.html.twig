@@ -1,0 +1,69 @@
+{%  extends "base.html.twig"  %}
+{% block title %}
+Bibliotech
+{% endblock %}
+
+
+{# 
+{%  block body %}
+
+        <a href="{{ path('app_book_index') }}">&#8592; Retour a la liste </a>
+
+                <h1> + Ajouter un livre </h1>
+
+                {{form(form)}}
+{% endblock %} #}
+
+
+{% block body %}
+
+{{ form_start(form) }}
+
+                  <div style="display:flex;flex-direction:column;gap:20px">
+                    <div>
+                         {{form_label(form.title)}}
+                    </div>
+                    <div>
+                         {{form_widget(form.title)}}
+                    </div>     
+                </div>
+       <div style="display:flex;flex-direction:column" > 
+                <div style="font-size:1.3em">
+                        {{form_label(form.description,null,{ 'label_attr' :{"style":"padding:10px; display:inline-block;"} })}} 
+                </div>
+                <div>
+                     {{form_widget(form.description) }}
+                </div>
+     </div>
+
+        <div style="display:flex;gap:20px;padding:10px;justify-content:flex-start;align-items:center;">    
+                    <div>
+                            {{form_label(form.stock,"Super Stock",{'label_attr':{'style':"font-size:1.3em;"}})}}     
+                    </div>
+                    <div>
+                         {{form_widget(form.stock,{'attr':{'style':'padding:5px;'}})}}
+                    </div>
+        </div>
+
+                    <div style="pdding:5px;display:flex">
+                                    <div >
+                                    {{ form_label(form.author,null,{'label_attr':{'style':'margin-rigth:60px;display:inline-block;width:100px;'}}) }}
+                                    </div>
+                                    <div>
+                                    {{ form_widget(form.author) }}
+                                    </div>
+                      </div> 
+                       
+                    <div>      
+                            <div>
+                            {{ form_label(form.categories,null,{'label_attr':{'style':'padding:9px;font-size:1.3em'}})}}
+                            </div>
+                                <div>
+                            {{ form_widget(form.categories)}}
+                            </div>
+                            
+                     </div>   
+    
+{{ form_end(form)}}
+
+{% endblock %}

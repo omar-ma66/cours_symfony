@@ -78,4 +78,14 @@ class BookRepository extends ServiceEntityRepository
 
   }
 
+  public function findbyletters(string $lettre)
+  {
+                    return $this->createQueryBuilder('b')
+                           ->andWhere('b.title like  :letter  ')
+                           ->setParameter('letter','%'.$lettre.'%')
+                           ->orderBy('b.title','ASC') 
+                           ->getQuery()
+                           ->getResult();
+  }
+
 }
