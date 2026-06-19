@@ -15,6 +15,15 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AuthorController extends AbstractController
 {
     #-----------------------------------------------------------------------------------------------------------------------------
+    #[route('/all',name:'app_auteur_all')]
+    public function allAteur(AuthorRepository $authorRepository)
+    {
+      $all =  $authorRepository->findAll();
+
+        dd( count($all));
+
+    }
+
     #-----------------------------------------------------------------------------------------------------------------------------
     #[Route(name: 'app_author_index', methods: ['GET'])]
     public function index(AuthorRepository $authorRepository): Response
