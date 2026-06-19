@@ -1,20 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AuthorController!{% endblock %}
+{% block title %}Author index{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Author index</h1>
+    <p>{{ authors|length }} auteur(s) dans la bibliothèque</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for author in authors %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+    <td class="px-6 py-4 text-sm font-medium text-gray-900">
+        {{ author.id }}
+    </td>
+    <td class="px-6 py-4 text-sm text-gray-700">
+        {{ author.firstName }}
+    </td>
+    <td class="px-6 py-4 text-sm text-gray-700">
+        {{ author.lastName }}
+    </td>
+    <td class="px-6 py-4 text-sm font-medium space-x-3">
+        <a href="{{ path('app_author_show', {id: author.id} ) }}" 
+           class="text-indigo-600 hover:text-indigo-900 hover:underline transition-colors">
+            Voir
+        </a>
+        
+        <span class="text-gray-300">|</span>
+        
+        <a href="{{ path('app_author_edit', {id: author.id} ) }}" 
+           class="text-amber-600 hover:text-amber-900 hover:underline transition-colors">
+            Modifier
+        </a>
+    </td>
+</tr>
+            {# <tr  >
+                <td  >{{ author.id }}</td>
+                <td  >{{ author.firstName }}</td>
+                <td  >{{ author.lastName }}</td>
+                <td>
+                    <a href="{{ path('app_author_show', {id: author.id} ) }}">Voir</a>||
+                    <a href="{{ path('app_author_edit', {id: author.id} ) }}">Modifier</a>
+                </td>
+            </tr> #}
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/wamp64/www/SYMFONY/TP3/cours/src/Controller/AuthorController.php</code></li>
-        <li>Your template at <code>C:/wamp64/www/SYMFONY/TP3/cours/templates/author/index.html.twig</code></li>
-    </ul>
-</div>
+    <a href="{{ path('app_author_new') }}"> Ajouter un auteur</a>
 {% endblock %}

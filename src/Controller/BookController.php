@@ -289,12 +289,12 @@ final class BookController extends AbstractController
     }
     // ---------------------------------------------------------------------------------------
 
-    #[route('/auteur/{name}', name: 'app_author_show')]
-    public function showAuteur(string $name): Response
-    {
+    // #[route('/auteur/{name}', name: 'app_author_show')]
+    // public function showAuteur(string $name): Response
+    // {
 
-        return new Response("Page de l' auteur $name ");
-    }
+    //     return new Response("Page de l' auteur $name ");
+    // }
     // ---------------------------------------------------------------------------------------
 
     #[route('/categorie/{categorie}/livre/{id}', name: 'app_book_by_category')]

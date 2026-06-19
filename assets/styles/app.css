@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+:root {
+  --color-brand: #4f46e5;
+  --font-family-sans: "Inter", sans-serif;
+}
+
+@theme{
+   --color-brand: #4f46e5;
+}
+
 body {
     background-color: skyblue;
 }

@@ -1,4 +1,4 @@
-  <header style="background-color: #2c3e50; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;">
+  {# <header style="background-color: #2c3e50; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;">
             <h1 style="margin: 0; font-size: 1.4em;">📚 Bibliotech</h1>
             <nav>
        
@@ -7,7 +7,43 @@
                 <a href="{{ path('app_book_show',{id: 1} ) }}" style="color: white; margin-left: 20px; text-decoration: none;  {% if app.current_route == 'app_book_show' %} font-weight: bold; text-decoration: underline;{% endif %} ">Voir le livre</a>
                 <a href="{{ path('app_about') }}" style="color: white; margin-left: 20px; text-decoration: none;  {% if app.current_route == 'app_about' %} font-weight: bold; text-decoration: underline;{% endif %} ">À propos</a>
                 <a href="{{ path('app_book_new')}}" style="color: white; margin-left: 20px; text-decoration: none; {% if app.current_route == 'app_book_new'%} font-weight: bold; text-decoration: underline;{% endif %} ">Ajouter Un Livre</a>
-           
+                <a href="{{ path('app_author_index') }}" style="color: white; margin-left: 20px; text-decoration: none;">Auteurs</a>
+                <a href="{{ path('app_category_index') }}" style="color: white; margin-left: 20px; text-decoration: none;">Categories</a>
            
             </nav>
-        </header>
+        </header> #}
+
+
+
+
+        <header class="bg-indigo-800 text-white shadow-md">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+        <a href="{{ path('app_home') }}" class="text-xl font-bold tracking-wide hover:text-indigo-200 transition">
+            📚 Bibliotech
+        </a>
+        <nav class="flex gap-6 text-sm font-medium">
+            <a href="{{ path('app_home') }}"
+               class="hover:text-indigo-200 transition {% if app.current_route == 'app_home' %}underline{% endif %}">
+                Accueil
+            </a>
+            <a href="{{ path('app_book_index') }}"
+               class="hover:text-indigo-200 transition {% if app.current_route starts with 'app_book' %}underline{% endif %}">
+                Livres
+            </a>
+            <a href="{{ path('app_author_index') }}"
+               class="hover:text-indigo-200 transition {% if app.current_route starts with 'app_author' %}underline{% endif %}">
+                Auteurs
+            </a>
+            <a href="{{ path('app_about') }}"
+               class="hover:text-indigo-200 transition {% if app.current_route == 'app_about' %}underline{% endif %}">
+                À propos
+            </a>
+                <a href="{{ path('app_category_index') }}" class="hover:text-indigo-200 transition {% if app.current_route == 'app_category_index' %}underline{% endif %}">Categories</a>
+
+            <a href="{{ path('app_book_new') }}"
+               class="bg-white text-indigo-800 hover:bg-indigo-100 font-semibold px-3 py-1 rounded transition">
+                ➕ Ajouter
+            </a>
+        </nav>
+    </div>
+</header>

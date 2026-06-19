@@ -1,7 +1,7 @@
-{%  extends "base.html.twig"  %}
+{# {%  extends "base.html.twig"  %}
 {% block title %}
 Bibliotech
-{% endblock %}
+{% endblock %} #}
 
 
 {# 
@@ -14,7 +14,7 @@ Bibliotech
                 {{form(form)}}
 {% endblock %} #}
 
-
+{# 
 {% block body %}
 
 {{ form_start(form) }}
@@ -66,4 +66,31 @@ Bibliotech
     
 {{ form_end(form)}}
 
+{% endblock %} #}
+
+
+{# templates/book/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Bibliotech — Nouveau livre{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_book_index') }}" class="text-indigo-600 hover:underline text-sm">← Retour à la liste</a>
+
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-8 mt-4 max-w-2xl">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">➕ Ajouter un livre</h1>
+
+        {{ form_start(form) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.stock) }}
+            {{ form_row(form.isbn) }}
+            {{ form_row(form.author) }}
+            {{ form_row(form.categories) }}
+            <button type="submit"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition mt-2">
+                💾 Enregistrer
+            </button>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}

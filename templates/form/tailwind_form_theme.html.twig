@@ -1,0 +1,43 @@
+ {% use 'form_div_layout.html.twig' %}
+
+{# Style de base pour les labels #}
+{% block form_label %}
+    {% set label_attr = label_attr|merge({class: (label_attr.class|default('')) ~ ' block text-sm font-medium text-gray-700 mb-1'}) %}
+    {{ parent() }}
+{% endblock %}
+
+{# Style pour les inputs texte, number, email, password… #}
+{% block form_widget_simple %}
+    {% set attr = attr|merge({class: (attr.class|default('')) ~ ' w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400'}) %}
+    {{ parent() }}
+{% endblock %}
+
+{# Style pour les textarea #}
+{% block textarea_widget %}
+    {% set attr = attr|merge({class: (attr.class|default('')) ~ ' w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-y'}) %}
+    {{ parent() }}
+{% endblock %}
+
+{# Style pour les <select> #}
+{% block choice_widget_collapsed %}
+    {% set attr = attr|merge({class: (attr.class|default('')) ~ ' w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400'}) %}
+    {{ parent() }}
+{% endblock %}
+
+{# Espacement entre chaque champ #}
+{% block form_row %}
+    <div class="mb-4">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </div>
+{% endblock %}
+
+{# Style pour les messages d'erreur #}
+{% block form_errors %}
+    {% if errors|length > 0 %}
+        {% for error in errors %}
+            <p class="text-red-600 text-xs mt-1">{{ error.message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

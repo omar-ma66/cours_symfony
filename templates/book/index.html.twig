@@ -2,33 +2,41 @@
 
 
 
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %}
 {% block title %}Bibliotech {% endblock %}
 
-{% block body %}
-                           <h1> nous avons trouver {{books|length }} et nous avons {{ categories|length}} categorie(s) </h1> 
+{% block stylesheets %}
+                <style>
+          
+                </style>
+{% endblock %}
 
-                                <h2 style="background-color:gray;padding:6px ">les catégories</h2>
+{% block body %}
+                           <h1 > nous avons trouver {{books|length }} et nous avons {{ categories|length}} categorie(s) </h1> 
+
+                                <h2 class="mb-1.5 bg-blue-300 px-1 py-1 text-amber-50 rounded-2xl">les catégories</h2>
 
                                                 {% for categorie in categories %}
 
                                                           <p style="text-decoration:underline ;font-weight:bold ;font-style:italic">  
-                                                          <a href="{{ path('app_select_categorie',{id: categorie.id})}}">{{categorie.name}} </a> </p>    
+                                                          <a  class="inline-block px-2 py-2 bg-indigo-600 hover:bg-indigo-300 rounded-lg text-amber-50 mb-4 transition" href="{{ path('app_select_categorie',{id: categorie.id})}}">{{categorie.name}} </a> </p>    
 
                                                 {% else %}
                                                 <p> rien </p>
 
-                                                {% endfor %}
+                                                {% endfor %} #}
 
 {# ----------------------------------------------------------------------------------------------------------------------------- #}
-                                           
+{#                                            
                                                {% for livre in books %} 
                                                         <ul style="list-style-type:none;border:1px solid gray;margin-bottom:5px;box-shadow:0 0 6px black;padding:20px;border-radius:10px">  
                                                                 <li>
                                                                 <span> Titre du livre</span> <strong>{{livre.title}}</strong>     
                                                                 </li> 
                                                                 <li>
-                                                                <span> Auteur</span>  <strong>{{livre.author.firstname}}</strong> <strong>{{livre.author.lastname}}</strong>    
+                                                               
+                                                               <a href="{{ path('app_author_show',{id:livre.author.id})}}">{{livre.author.firstName}} {{livre.author.lastName}}</a>
+                                                               
                                                                 </li>
                                                                 <li>
                                                                 <span>Stock</span> <strong>{{livre.stock}}</sttrong>
@@ -36,24 +44,106 @@
                                                                 <li>       
                                                                 <a href="{{ path('app_book_show',{id: livre.id}) }}">voire</a>|
                                                                 <a href="{{ path('app_book_edit',{id: livre.id}) }}">edit </a>|
-                                                                {# <a href="{{path('app_book_delete',{id:livre.id})  }}">Supprimer</a> #}
+                                                        
 
                                                                 <form method="POST" action="{{ path('app_book_delete',{id:livre.id})}}" onsubmit="return confirm(''es tu sur de vouloir supprimer {{livre.title}})">
                                                                   <input type="hidden" name="_token" value="{{csrf_token('delete-book-'~ livre.id )}}">                      
-                                                                   <button type="submit">Supprimer</button>
+                                                                   <button class="inline-block px-2 py-2 bg-indigo-600 hover:bg-indigo-300 rounded-lg text-amber-50 mb-4 transition"  type="submit">Supprimer</button>
                                                                 </form>
 
                                                                 </li> </ul>
                                                         {% else %}
                                                         <p> pas de livre pour le moment </p>
                                                        
-                                               {% endfor %}
+                                               {% endfor %} #}
                                       
 {# ----------------------------------------------------------------------------------------------------------------------------- #}
-
+{# 
 <a href="{{ path('app_book_new') }}">Ajouter un livre </a>
 
+{% endblock %} #}
+
+
+
+{# """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Bibliotech — Nos livres{% endblock %}
+
+{% block body %}
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">📚 Nos livres</h1>
+        <a href="{{ path('app_book_new') }}"
+           class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+            ➕ Ajouter un livre
+        </a>
+    </div>
+
+    {# Catégories #}
+    {% if categories is defined and categories|length > 0 %}
+    <div class="flex flex-wrap gap-2 mb-6">
+        {% for category in categories %}
+            <a href="{{ path('app_select_categorie', {id: category.id}) }}"
+               class="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 text-sm font-medium px-3 py-1 rounded-full transition">
+                🏷️ {{ category.name }}
+            </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {# Recherche #}
+    <form method="GET" action="{{ path('app_book_index') }}" class="flex gap-2 mb-6">
+        <input type="text" name="q"
+               value="{{ search|default('') }}"
+               placeholder="Rechercher un livre…"
+               class="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+        <button type="submit"
+                class="bg-gray-700 hover:bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+            🔍 Rechercher
+        </button>
+        {% if search|default('') %}
+            <a href="{{ path('app_book_index') }}"
+               class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg transition">
+                ✕ Effacer
+            </a>
+        {% endif %}
+    </form>
+
+    <p class="text-sm text-gray-500 mb-4">{{ books|length }} livre(s) trouvé(s)</p>
+
+    <div class="grid grid-cols-1 gap-4">
+        {% for book in books %}
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-4 flex justify-between items-center hover:shadow-md transition">
+                <div>
+                    <a href="{{ path('app_book_show', {id: book.id}) }}"
+                       class="text-lg font-semibold text-indigo-700 hover:underline">
+                        {{ book.title }}
+                    </a>
+                    <p class="text-sm text-gray-500 mt-1">
+                        ✍️ <a href="{{ path('app_author_show', {id: book.author.id}) }}"
+                              class="hover:underline">
+                            {{ book.author.firstName }} {{ book.author.lastName }}
+                        </a>
+                        &nbsp;·&nbsp;
+                        Stock :
+                        <span class="font-medium {% if book.stock == 0 %}text-red-600{% else %}text-green-600{% endif %}">
+                            {{ book.stock }}
+                        </span>
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 text-sm">
+                    <a href="{{ path('app_book_edit', {id: book.id}) }}"
+                       class="text-indigo-600 hover:underline">✏️ Modifier</a>
+                    <form method="POST" action="{{ path('app_book_delete', {id: book.id}) }}"
+                          onsubmit="return confirm('Supprimer « {{ book.title }} » ?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete-book-' ~ book.id) }}">
+                        <button type="submit" class="text-red-500 hover:underline cursor-pointer">🗑️</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-gray-500 py-8 text-center">😕 Aucun livre disponible pour le moment.</p>
+        {% endfor %}
+    </div>
 {% endblock %}
-
-
-

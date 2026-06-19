@@ -3,40 +3,98 @@
 namespace App\Controller;
 
 use App\Entity\Author;
+use App\Form\AuthorType;
 use App\Repository\AuthorRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Dom\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/auteur')]
 final class AuthorController extends AbstractController
 {
-// ---------------------------------------------------------------------------------------------------------
-
-    #[Route('/author', name: 'app_author')]
-    public function index(): Response
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #[Route(name: 'app_author_index', methods: ['GET'])]
+    public function index(AuthorRepository $authorRepository): Response
     {
         return $this->render('author/index.html.twig', [
-            'controller_name' => 'AuthorController',
+            'authors' => $authorRepository->findAll(),
         ]);
     }
-// ---------------------------------------------------------------------------------------------------------
-    #[route('/auteur/delete/{id}',name:'app_author_delete',requirements:['id'=>'\d+'],methods:['GET'])]
-    public function delete(int $id ,EntityManagerInterface $em ,Author $author):Response
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #[Route('/nouveau', name: 'app_author_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $em->remove($author);
-        $em->flush();
-            return new Response("l'auteur $id est suprimer ");
+        $author = new Author();
+        $form = $this->createForm(AuthorType::class, $author);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($author);
+            $entityManager->flush();
+                    $this->addFlash('succes',"la creation de l' auteur "." ".$author->getFirstName()." ".$author->getLastName()." est un succes");
+
+            return $this->redirectToRoute('app_author_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('author/new.html.twig', [
+            'author' => $author,
+            'form' => $form,
+        ]);
     }
-// ---------------------------------------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #[Route('/{id}', name: 'app_author_show', methods: ['GET'])]
+    public function show(Author $author): Response
+    {
+        return $this->render('author/show.html.twig', [
+            'author' => $author,
+        ]);
+    }
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #[Route('/{id}/modifier', name: 'app_author_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Author $author, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(AuthorType::class, $author);
+        $form->handleRequest($request);
 
-#[route('/author/all')]
-public function all(AuthorRepository $authorRepository):Response
-{
-   $data =     $authorRepository->getAuth();
-   dd($data);
-   return new Response($data);
-}
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+                    $this->addFlash('succes',"la mise a jour de l' auteur "." ".$author->getFirstName()." ".$author->getLastName()." est un succes");
+            return $this->redirectToRoute('app_author_index', [], Response::HTTP_SEE_OTHER);
+        }
 
+        return $this->render('author/edit.html.twig', [
+            'author' => $author,
+            'form' => $form,
+        ]);
+    }
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #[Route('/{id}', name: 'app_author_delete', methods: ['POST'])]
+    public function delete(Request $request, Author $author, EntityManagerInterface $entityManager): Response
+    {
+         if( count($author->getBooks()->toArray()) == 0) //  ou $author->getBooks()->count() == 0
+          {  
+        if ($this->isCsrfTokenValid('delete'.$author->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($author);
+            $entityManager->flush();
+           $this->addFlash('succes',"la supprétion l' auteur "." ".$author->getFirstName()." ".$author->getLastName()." est un succes");
+
+        }
+          }
+          else
+            {
+           $this->addFlash('error',"la supprétion l' auteur "." ".$author->getFirstName()." ".$author->getLastName()." n'est pas possible");
+
+            }
+
+        return $this->redirectToRoute('app_author_index', [], Response::HTTP_SEE_OTHER);
+    }
 }
+    #-----------------------------------------------------------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------------------------------------
