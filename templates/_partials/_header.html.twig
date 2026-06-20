@@ -22,6 +22,14 @@
             📚 Bibliotech
         </a>
         <nav class="flex gap-6 text-sm font-medium">
+
+            {% if app.user %}
+             <span class="text-indigo-200 text-sm">  {{ app.firsName ?? app.email}} </span><a class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded transition" href="#"> Deconnection </a>
+            {% else %}
+                <a  class="bg-white text-indigo-800 hover:bg-indigo-100 text-sm font-semibold px-3 py-1 rounded transition" href="#">Connection</a>
+            {% endif %}         
+
+
             <a href="{{ path('app_home') }}"
                class="hover:text-indigo-200 transition {% if app.current_route == 'app_home' %}underline{% endif %}">
                 Accueil

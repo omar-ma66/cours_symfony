@@ -93,6 +93,7 @@
     {% endif %}
 
     {# Recherche #}
+
     <form method="GET" action="{{ path('app_book_index') }}" class="flex gap-2 mb-6">
         <input type="text" name="q"
                value="{{ search|default('') }}"
@@ -102,12 +103,15 @@
                 class="bg-gray-700 hover:bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
             🔍 Rechercher
         </button>
+
         {% if search|default('') %}
             <a href="{{ path('app_book_index') }}"
                class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg transition">
                 ✕ Effacer
             </a>
         {% endif %}
+  
+
     </form>
 
     <p class="text-sm text-gray-500 mb-4">{{ books|length }} livre(s) trouvé(s)</p>
@@ -132,15 +136,21 @@
                         </span>
                     </p>
                 </div>
+
+             
                 <div class="flex items-center gap-3 text-sm">
+                 {% if is_granted('ROLE_ADMIN') %}  
                     <a href="{{ path('app_book_edit', {id: book.id}) }}"
                        class="text-indigo-600 hover:underline">✏️ Modifier</a>
+
                     <form method="POST" action="{{ path('app_book_delete', {id: book.id}) }}"
                           onsubmit="return confirm('Supprimer « {{ book.title }} » ?')">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete-book-' ~ book.id) }}">
                         <button type="submit" class="text-red-500 hover:underline cursor-pointer">🗑️</button>
                     </form>
+                {% endif %}  
                 </div>
+            
             </div>
         {% else %}
             <p class="text-gray-500 py-8 text-center">😕 Aucun livre disponible pour le moment.</p>
