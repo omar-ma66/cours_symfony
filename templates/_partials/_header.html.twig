@@ -24,9 +24,9 @@
         <nav class="flex gap-6 text-sm font-medium">
 
             {% if app.user %}
-             <span class="text-indigo-200 text-sm">  {{ app.firsName ?? app.email}} </span><a class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded transition" href="#"> Deconnection </a>
+             <span class="text-indigo-200 text-sm">  {{ app.user.firstName ?? app.user.email}} </span><a class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded transition" href="{{path('app_logout')}}"> Deconnection </a>
             {% else %}
-                <a  class="bg-white text-indigo-800 hover:bg-indigo-100 text-sm font-semibold px-3 py-1 rounded transition" href="#">Connection</a>
+                <a  class="bg-white text-indigo-800 hover:bg-indigo-100 text-sm font-semibold px-3 py-1 rounded transition" href="{{path('app_login')}}">Connection</a>
             {% endif %}         
 
 
