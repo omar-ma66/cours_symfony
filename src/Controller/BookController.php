@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\ValidateRequestListener;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class BookController extends AbstractController
 {
@@ -23,14 +24,17 @@ final class BookController extends AbstractController
     // ----------------------------------------------------------------------------------------------
 
     #[Route('/livres/test/{id}', name: 'app_test_relation', requirements: ['id' => '\d+'])]
-    public function affiche(AuthorRepository $authorRepository, Author $author, int $id): Response
+    public function affiche(AuthorRepository $authorRepository, Author $author, int $id,EntityManagerInterface $em): Response
     {
 
-        $auteur =    $authorRepository->find($id);
+           $firstname = $author->getFirstName(); 
+           $em->remove($author) ;
+           $em->flush();
+       // $auteur =    $authorRepository->find($id);
 
-        dd($auteur->getFirstName(), $auteur->getBooks()->toArray()[0]->getTitle());
+       // dd($auteur->getFirstName(), $auteur->getBooks()->toArray()[0]->getTitle());
 
-        $auteur->delete();
+       // $auteur->delete();
         // $books = $author->getBooks()->toArray();
         // // dd($author,$books);
         // //dd($books[0]->getCategories()[0]->getName());
@@ -47,16 +51,14 @@ final class BookController extends AbstractController
         // }
 
         // $out = $titre . ";" . $nom;
-
-
-
-        // return new Response($out);
+    return new Response($firstname);
     }
     // ----------------------------------------------------------------------------------------------
 
     #[Route('/livres/ajout', name: 'app_book_add')]
     public function add(EntityManagerInterface $em, CategoryRepository $categoryRepository)
     {
+           return new Response("Les Données sont enregistrées ");
         $auteur1 = new Author();
         $auteur1->setFirstName("Antoine");
         $auteur1->setLastName("De Saint-Exupéry");
@@ -99,6 +101,7 @@ final class BookController extends AbstractController
     #[Route('/livres/init', name: 'app_book_init')]
     public function init(EntityManagerInterface $em)
     {
+           return new Response("Les Données sont enregistrées ");
         $herbert = new Author();
         $herbert->setFirstName('Frank');
         $herbert->setLastName('Herbert');
@@ -193,6 +196,7 @@ final class BookController extends AbstractController
     }
     // ---------------------------------------------------------------------------------------
     #[route('/livres/nouveau', name: 'app_book_new')]
+    #[isGranted('ROLE_ADMIN')]
     public function new(Request $request, EntityManagerInterface $em)
     {
         $book = new Book();
@@ -215,6 +219,7 @@ final class BookController extends AbstractController
     #[route('/livres/{id}/supprimer',name:'app_book_delete',requirements:['id'=>'\d+'],methods:['POST'])]
     public function deleteBook(Book $book ,Request $request,EntityManagerInterface $em)
     {
+               $this->denyAccessUnlessGranted('ROLE_ADMIN'); 
             if(!$book)
                 {
                     throw $this->createNotFoundException("ce livre n'existe pas ");
@@ -236,6 +241,7 @@ final class BookController extends AbstractController
 
     // ---------------------------------------------------------------------------------------
     #[route('/livres/{id}/modifier', name: 'app_book_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Book $book, Request $request, EntityManagerInterface $em)
     {
 

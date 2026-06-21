@@ -23,6 +23,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                default_target_path: app_book_index
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -39,12 +40,12 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
        
-            - { path: ^/livres/nouveau, roles: ROLE_ADMIN }
-            - { path: ^/livres/\d+/modifier, roles: ROLE_ADMIN }
-            - { path: ^/livres/\d+/supprimer, roles: ROLE_ADMIN }
-            - { path: ^/auteur/nouveau, roles: ROLE_ADMIN }
-            - { path: ^/auteur/\d+/modifier, roles: ROLE_ADMIN }
-            - { path: ^/auteur/\d+/supprimer, roles: ROLE_ADMIN }
+        #    - { path: ^/livres/nouveau, roles: ROLE_ADMIN }
+        #    - { path: ^/livres/\d+/modifier, roles: ROLE_ADMIN }
+        #    - { path: ^/livres/\d+/supprimer, roles: ROLE_ADMIN }
+        #    - { path: ^/auteur/nouveau, roles: ROLE_ADMIN }
+        #    - { path: ^/auteur/\d+/modifier, roles: ROLE_ADMIN }
+        #    - { path: ^/auteur/\d+/supprimer, roles: ROLE_ADMIN }
 
 when@test:
     security:

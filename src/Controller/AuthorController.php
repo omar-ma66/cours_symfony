@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/auteur')]
 final class AuthorController extends AbstractController
@@ -35,6 +36,7 @@ final class AuthorController extends AbstractController
     #-----------------------------------------------------------------------------------------------------------------------------
     #-----------------------------------------------------------------------------------------------------------------------------
     #[Route('/nouveau', name: 'app_author_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $author = new Author();
@@ -66,6 +68,7 @@ final class AuthorController extends AbstractController
     #-----------------------------------------------------------------------------------------------------------------------------
     #-----------------------------------------------------------------------------------------------------------------------------
     #[Route('/{id}/modifier', name: 'app_author_edit', methods: ['GET', 'POST'])]
+    #[isGranted('ROLE_ADMIN')]
     public function edit(Request $request, Author $author, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(AuthorType::class, $author);
@@ -85,6 +88,7 @@ final class AuthorController extends AbstractController
     #-----------------------------------------------------------------------------------------------------------------------------
     #-----------------------------------------------------------------------------------------------------------------------------
     #[Route('/{id}', name: 'app_author_delete', methods: ['POST'])]
+    #[isGranted('ROLE_ADMIN')]
     public function delete(Request $request, Author $author, EntityManagerInterface $entityManager): Response
     {
          if( count($author->getBooks()->toArray()) == 0) //  ou $author->getBooks()->count() == 0
