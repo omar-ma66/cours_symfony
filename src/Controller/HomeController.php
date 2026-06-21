@@ -12,16 +12,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    #[IsGranted('ROLE_USER')]
+ 
     public function index(): Response
     {
-        $utilisateur = $this->getUser();
-
-/** @var User $utilisateur */
-        dd($utilisateur->getFirstName());
+    
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
-            'name'=>$utilisateur
+          
         ]);
     }
 
