@@ -68,6 +68,11 @@ class Borrowing
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->user;
+    }
+
     public function getBook(): ?Book
     {
         return $this->book;

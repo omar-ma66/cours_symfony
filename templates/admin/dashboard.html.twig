@@ -1,0 +1,24 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card text-center p-4">
+            <p class="display-4 fw-bold text-primary">{{ bookCount }}</p>
+            <p class="text-muted">Livres dans la bibliothèque</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-4">
+            <p class="display-4 fw-bold text-success">{{ userCount }}</p>
+            <p class="text-muted">Utilisateurs inscrits</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-4">
+            <p class="display-4 fw-bold text-warning">{{ activeBorrowings }}</p>
+            <p class="text-muted">Emprunts en cours</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
