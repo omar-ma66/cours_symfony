@@ -77,8 +77,50 @@
                 {% endfor %}
             </div>
         {% endif %}
+        {# ############################################################################################################################ #}
 
-        <div class="flex gap-4 mt-6 border-t pt-4">
+
+        {# Dans la section des boutons d'action, après les boutons admin : #}
+
+{% if app.user %}
+    {% set hasActiveBorrowing = false %}
+    {# On vérifie si l'utilisateur a déjà ce livre en cours d'emprunt #}
+    {% for b in book.borrowings %}
+        {% if b.user == app.user and b.returnedAt == null %}
+            {% set hasActiveBorrowing = true %}
+        {% endif %}
+    {% endfor %}
+
+    {% if hasActiveBorrowing %}
+        <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm px-4 py-2 rounded-lg">
+            📚 Tu as déjà ce livre en cours d'emprunt.
+            <a href="{{ path('app_borrowing_my') }}" class="underline font-medium">Voir mes emprunts →</a>
+        </div>
+    {% elseif book.stock > 0 %}
+        <form method="POST" action="{{ path('app_borrowing_borrow', {id: book.id}) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('borrow-' ~ book.id) }}">
+            <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition cursor-pointer">
+                📖 Emprunter ce livre
+            </button>
+        </form>
+    {% else %}
+        <span class="bg-gray-100 text-gray-500 text-sm font-medium py-2 px-4 rounded-lg">
+            😕 Indisponible (stock épuisé)
+        </span>
+    {% endif %}
+{% else %}
+    <a href="{{ path('app_login') }}"
+       class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 text-sm font-semibold py-2 px-4 rounded-lg transition">
+        🔑 Connecte-toi pour emprunter
+    </a>
+{% endif %}
+
+        {# ############################################################################################################################ #}
+
+  
+        <div class="flex gap-4 mt-6 border-t pt-4"> 
+        {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('app_book_edit', {id: book.id}) }}"
                class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition">
                 ✏️ Modifier
@@ -91,6 +133,7 @@
                     🗑️ Supprimer
                 </button>
             </form>
+          {% endif %}  
         </div>
     </div>
 {% endblock %}

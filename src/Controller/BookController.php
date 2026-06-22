@@ -58,7 +58,7 @@ final class BookController extends AbstractController
     #[Route('/livres/ajout', name: 'app_book_add')]
     public function add(EntityManagerInterface $em, CategoryRepository $categoryRepository)
     {
-           return new Response("Les Données sont enregistrées ");
+      
         $auteur1 = new Author();
         $auteur1->setFirstName("Antoine");
         $auteur1->setLastName("De Saint-Exupéry");
@@ -101,7 +101,7 @@ final class BookController extends AbstractController
     #[Route('/livres/init', name: 'app_book_init')]
     public function init(EntityManagerInterface $em)
     {
-           return new Response("Les Données sont enregistrées ");
+        
         $herbert = new Author();
         $herbert->setFirstName('Frank');
         $herbert->setLastName('Herbert');

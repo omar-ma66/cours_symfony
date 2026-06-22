@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+{% block title %}All user emprunt  {% endblock %}
+
+{% block body %}
+
+            {# <h1> liste de tout les livres empruntés </h1>
+
+                    {%  for emprunt in all  %}
+
+<div>
+       <p> <span>utilisateur</span> : {{ emprunt.user.firstName}}&nbsp;&nbsp; {{ emprunt.user.lastName}}</p>
+       <p> <span>Titre de livre</span>:{{ emprunt.book.title}} </p>
+       <p> <span>Date d'emprunt</span>:{{emprunt.borrowedAt}} </p>
+       <p> <span>Date de retour</span>: {% if emprunt.returneAt == null %} En cours {% else %} {{emprunt.returneAt|date('m/d/Y')}} {% endif %} </p>
+</div>                
+
+                    {% endfor %} #}
+
+
+                    <div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-sm border border-gray-100 my-8">
+    
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Liste de tous les livres empruntés</h1>
+        <p class="text-sm text-gray-500 mt-1">Historique global et suivi des emprunts en cours.</p>
+    </div>
+
+    <div class="overflow-x-auto rounded-lg border border-gray-200">
+        <table class="min-w-full divide-y divide-gray-200 bg-white text-sm">
+            <thead class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                <tr>
+                    <th class="px-6 py-4">Utilisateur</th>
+                    <th class="px-6 py-4">Titre du livre</th>
+                    <th class="px-6 py-4">Date d'emprunt</th>
+                    <th class="px-6 py-4">Statut / Retour</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-200 text-gray-700">
+                {% for emprunt in all %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+                            {{ emprunt.user.firstName }} {{ emprunt.user.lastName|upper }}
+                        </td>
+                        
+                        <td class="px-6 py-4 max-w-xs truncate">
+                            <span class="font-semibold text-indigo-600">{{ emprunt.book.title }}</span>
+                        </td>
+                        
+                        <td class="whitespace-nowrap px-6 py-4 text-gray-500">
+                            {{ emprunt.borrowedAt|date('d/m/Y') }}
+                        </td>
+                        
+                        <td class="whitespace-nowrap px-6 py-4">
+                            {% if emprunt.returnedAt == null %}
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                                    En cours
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                    Rendu le {{ emprunt.returnedAt|date('d/m/Y') }}
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-10 text-center text-gray-400 bg-gray-50/50">
+                            Aucun livre n'est emprunté pour le moment.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

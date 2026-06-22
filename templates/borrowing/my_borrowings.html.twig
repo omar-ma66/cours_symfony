@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bibliotech — Mes emprunts{% endblock %}
+
+{% block body %}
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">📚 Mes emprunts en cours</h1>
+
+    {% if borrowings|length == 0 %}
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-8 text-center text-gray-500">
+            <p class="text-lg">Tu n'as aucun emprunt en cours.</p>
+            <a href="{{ path('app_book_index') }}"
+               class="inline-block mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                📖 Parcourir les livres
+            </a>
+        </div>
+    {% else %}
+        <p class="text-sm text-gray-500 mb-4">{{ borrowings|length }} emprunt(s) en cours</p>
+        <div class="grid grid-cols-1 gap-4">
+            {% for borrowing in borrowings %}
+                <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-4 flex justify-between items-center">
+                    <div>
+                        <a href="{{ path('app_book_show', {id: borrowing.book.id}) }}"
+                           class="text-lg font-semibold text-indigo-700 hover:underline">
+                            {{ borrowing.book.title }}
+                        </a>
+                        <p class="text-sm text-gray-500 mt-1">
+                            ✍️ {{ borrowing.book.author.firstName }} {{ borrowing.book.author.lastName }}
+                        </p>
+                        <p class="text-xs text-gray-400 mt-1">
+                            Emprunté le {{ borrowing.borrowedAt|date('d/m/Y') }}
+                        </p>
+                    </div>
+                    <form method="POST"
+                          action="{{ path('app_borrowing_return', {id: borrowing.id}) }}"
+                          onsubmit="return confirm('Confirmer le retour de « {{ borrowing.book.title }} » ?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('return-' ~ borrowing.id) }}">
+                        <button type="submit"
+                                class="bg-green-100 hover:bg-green-200 text-green-800 font-semibold text-sm py-2 px-4 rounded-lg transition cursor-pointer">
+                            📬 Rendre
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

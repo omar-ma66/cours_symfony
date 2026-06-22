@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous les Emprumts {% endblock %} 
+
+{% block body %}
+                 
+<div class="max-w-4xl mx-auto p-6 bg-gray-50 min-h-screen">
+    
+    <h1 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-4">
+        Tous vos Emprunts <span class="text-indigo-600 font-semibold">{{ allbooks[0].user.firstname }}</span>
+    </h1>
+
+    <div class="space-y-4">
+        {% for emprunt in allbooks %}
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 hover:shadow-md transition-shadow">
+                
+                <div class="space-y-1">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Livre</span>
+                    <h2 class="text-lg font-bold text-gray-900">{{ emprunt.book.title }}</h2>
+                    <p class="text-sm text-gray-500">
+                        Emprunté le : <span class="font-medium text-gray-700">{{ emprunt.borrowedAt|date('d/m/Y') }}</span>
+                    </p>
+                </div>
+
+                <div class="flex items-center sm:text-right">
+                    {% if emprunt.returnedAt == null %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-800 animate-pulse">
+                            <span class="w-2 h-2 mr-2 bg-amber-500 rounded-full"></span>
+                            En cours
+                        </span>
+                    {% else %}
+                        <div class="text-left sm:text-right">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 mb-1">
+                                <span class="w-2 h-2 mr-2 bg-green-500 rounded-full"></span>
+                                Retourné
+                            </span>
+                            <p class="text-xs text-gray-400">le {{ emprunt.returnedAt|date('d/m/Y') }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        {% else %}
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center text-gray-500">
+                Vous n'avez aucun emprunt enregistré pour le moment.
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

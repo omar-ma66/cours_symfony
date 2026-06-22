@@ -24,11 +24,29 @@
         <nav class="flex gap-6 text-sm font-medium">
 
             {% if app.user %}
-             <span class="text-indigo-200 text-sm">  {{ app.user.firstName ?? app.user.email}} </span><a class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded transition" href="{{path('app_logout')}}"> Deconnection </a>
+                {%  if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_livres_all_user') }}"
+                    class="hover:text-indigo-200 transition {% if app.current_route == 'app_livres_all_user' %}underline{% endif %}">
+                        📚 tous les emprunts
+                </a>
+                {% endif %}
+
+              <a href="{{ path('app_borrowing_my') }}"
+                    class="hover:text-indigo-200 transition {% if app.current_route starts with 'app_borrowing' %}underline{% endif %}">
+                        📚 Mes emprunts
+                </a>
+
+                   <a href="{{ path('app_livres_all') }}"
+                    class="hover:text-indigo-200 transition {% if app.current_route starts with 'app_borrowing' %}underline{% endif %}">
+                        📚 Tous Mes emprunts
+                </a>
+             <span class="text-indigo-200 text-sm">  👤 {{ app.user.firstName ?? app.user.email}} </span><a class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded transition" href="{{path('app_logout')}}"> Deconnection </a>
             {% else %}
                 <a  class="bg-white text-indigo-800 hover:bg-indigo-100 text-sm font-semibold px-3 py-1 rounded transition" href="{{path('app_login')}}">Connection</a>
             {% endif %}         
 
+          
+         
 
             <a href="{{ path('app_home') }}"
                class="hover:text-indigo-200 transition {% if app.current_route == 'app_home' %}underline{% endif %}">
