@@ -1,72 +1,4 @@
-
-
-
-
-{# {% extends 'base.html.twig' %}
-{% block title %}Bibliotech {% endblock %}
-
-{% block stylesheets %}
-                <style>
-          
-                </style>
-{% endblock %}
-
-{% block body %}
-                           <h1 > nous avons trouver {{books|length }} et nous avons {{ categories|length}} categorie(s) </h1> 
-
-                                <h2 class="mb-1.5 bg-blue-300 px-1 py-1 text-amber-50 rounded-2xl">les catégories</h2>
-
-                                                {% for categorie in categories %}
-
-                                                          <p style="text-decoration:underline ;font-weight:bold ;font-style:italic">  
-                                                          <a  class="inline-block px-2 py-2 bg-indigo-600 hover:bg-indigo-300 rounded-lg text-amber-50 mb-4 transition" href="{{ path('app_select_categorie',{id: categorie.id})}}">{{categorie.name}} </a> </p>    
-
-                                                {% else %}
-                                                <p> rien </p>
-
-                                                {% endfor %} #}
-
-{# ----------------------------------------------------------------------------------------------------------------------------- #}
-{#                                            
-                                               {% for livre in books %} 
-                                                        <ul style="list-style-type:none;border:1px solid gray;margin-bottom:5px;box-shadow:0 0 6px black;padding:20px;border-radius:10px">  
-                                                                <li>
-                                                                <span> Titre du livre</span> <strong>{{livre.title}}</strong>     
-                                                                </li> 
-                                                                <li>
-                                                               
-                                                               <a href="{{ path('app_author_show',{id:livre.author.id})}}">{{livre.author.firstName}} {{livre.author.lastName}}</a>
-                                                               
-                                                                </li>
-                                                                <li>
-                                                                <span>Stock</span> <strong>{{livre.stock}}</sttrong>
-                                                                </li>
-                                                                <li>       
-                                                                <a href="{{ path('app_book_show',{id: livre.id}) }}">voire</a>|
-                                                                <a href="{{ path('app_book_edit',{id: livre.id}) }}">edit </a>|
-                                                        
-
-                                                                <form method="POST" action="{{ path('app_book_delete',{id:livre.id})}}" onsubmit="return confirm(''es tu sur de vouloir supprimer {{livre.title}})">
-                                                                  <input type="hidden" name="_token" value="{{csrf_token('delete-book-'~ livre.id )}}">                      
-                                                                   <button class="inline-block px-2 py-2 bg-indigo-600 hover:bg-indigo-300 rounded-lg text-amber-50 mb-4 transition"  type="submit">Supprimer</button>
-                                                                </form>
-
-                                                                </li> </ul>
-                                                        {% else %}
-                                                        <p> pas de livre pour le moment </p>
-                                                       
-                                               {% endfor %} #}
-                                      
-{# ----------------------------------------------------------------------------------------------------------------------------- #}
-{# 
-<a href="{{ path('app_book_new') }}">Ajouter un livre </a>
-
-{% endblock %} #}
-
-
-
 {# """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Bibliotech — Nos livres{% endblock %}
@@ -143,8 +75,12 @@
                     <a href="{{ path('app_book_edit', {id: book.id}) }}"
                        class="text-indigo-600 hover:underline">✏️ Modifier</a>
 
-                    <form method="POST" action="{{ path('app_book_delete', {id: book.id}) }}"
-                          onsubmit="return confirm('Supprimer « {{ book.title }} » ?')">
+                    <form 
+                    data-controller="confirm" 
+                    data-confirm-message-value="tu veux supprimer {{ book.title}}"
+                    data-action="submit->confirm#confirm" 
+                    method="POST" action="{{ path('app_book_delete', {id: book.id}) }}">
+                          {# onsubmit="return confirm('Supprimer « {{ book.title }} » ?')"> #}
                         <input type="hidden" name="_token" value="{{ csrf_token('delete-book-' ~ book.id) }}">
                         <button type="submit" class="text-red-500 hover:underline cursor-pointer">🗑️</button>
                     </form>

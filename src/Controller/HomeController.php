@@ -12,7 +12,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
- 
     public function index(): Response
     {
     
@@ -28,5 +27,11 @@ final class HomeController extends AbstractController
         return $this->render('home/about.html.twig', [
             'app_name' => 'Bibliotech',
         ]);
+    }
+
+    #[route('/stimulus',name:'app_stimulus_test')]
+    public function testStimulus()
+    {
+        return $this->render('monTestStimulus/test.html.twig');
     }
 }

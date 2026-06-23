@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use App\Form\Field\AuthorAutocompleteField;
+
 class BookType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -52,6 +54,10 @@ class BookType extends AbstractType
                     return $author->getFirstName().' '.$author->getLastName();
                 }
             ])
+
+            //    ->add('author', AuthorAutocompleteField::class, [
+            //     'class' => Author::class,
+            // ])
             ->add('categories', EntityType::class, [
                 'class' => Category::class,
                 'choice_label'   => 'name',

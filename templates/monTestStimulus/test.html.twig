@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{% block title %} test Stimulus {% endblock %}
+
+{% block body %}
+<div class="flex justify-between items-center w-70/100 m-auto"> 
+        <div data-controller="hello" data-hello-message-value="bonjour Bibliotech">
+                <button class="px-6 py-3 bg-blue-500 text-amber-50 rounded-md hover:bg-blue-700 transition  hover:cursor-pointer shadow-amber-600 shadow" data-action="click->hello#greet">Saluer</button>
+                <p data-hello-target="output">je vais changer</p>
+        </div>
+
+
+        <div data-controller="test" data-test-texte-value="Nouveau texte">
+                <button class="px-6 py-3 bg-blue-500 text-amber-50 rounded-md hover:bg-blue-700 transition  hover:cursor-pointer shadow-amber-600 shadow" data-action="click->test#change"> click me </button>
+                <p data-test-target="modiffier"> je vais changé </p>
+        </div>
+
+          <div id="start">
+                <button class="px-6 py-3 bg-blue-500 text-amber-50 rounded-md hover:bg-blue-700 transition  hover:cursor-pointer shadow-amber-600 shadow" data-action="click->test#change"> click me </button>
+                <p id="out" data-test-target="modiffier"> je vais changé </p>
+        </div>
+
+        
+</div>
+  <div data-controller="texte" data-texte-message1-value="vous avez me survolé" data-texte-message2-value="vous avez me survolé" data-texte-message3-value="vous avez me survolé" >
+
+                <p data-texte-target="test1" class="w-60  px-8 py-8 mb-3 border-2 bg-amber-200" data-action="mouseover->texte#func1 mouseout->texte#out1">test 1 </p>
+                <p data-texte-target="test2" class="w-60 px-8 py-8  mb-3 border-2 bg-amber-200"  data-action="mouseover->texte#func2 mouseout->texte#out2">test 1 </p>
+                <p data-texte-target="test3" class="w-60 px-8 py-8  mb-3 border-2 bg-amber-200" data-action="mouseover->texte#func3 mouseout->texte#out3">test 1 </p>
+        </div>
+{% endblock %}
+
+{% block javascripts %}
+        {{   parent() }}
+        <script>
+const start = document.querySelector("#start");
+const out = document.querySelector("#out");
+    if(start)
+    {
+        start.addEventListener('click',(e)=>
+        {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log("ca marche");
+            out.innerText = "Malki Omar" ;
+         
+        });
+    }
+
+        </script>
+{% endblock %}

@@ -1,4 +1,10 @@
-<form method="post" style="padding:10px" action="{{ path( 'app_author_delete', {'id': author.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form data-controller="confirm" 
+     {# data-confirm-message-value="supprimer {{author.firstname}}{{author.lastname}}" #}
+     data-action="submit->confirm#confirm" 
+     method="post" 
+     style="padding:10px"
+     action="{{ path( 'app_author_delete', {'id': author.id}) }}">
+      {# onsubmit="return confirm('Are you sure you want to delete this item?');"> #}
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ author.id) }}">
     <button style="padding:5px 12px" class="btn">Delete</button>
 </form>

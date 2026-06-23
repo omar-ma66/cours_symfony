@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Controller\Admin;
-
+use App\Entity\Author;
+use App\Entity\Book;
+use App\Entity\Borrowing;
+use App\Entity\Category;
+use App\Entity\User;
 use App\Repository\BookRepository;
 use App\Repository\BorrowingRepository;
 use App\Repository\UserRepository;
@@ -45,9 +49,20 @@ public function index(): Response
      
     }
 
-    public function configureMenuItems(): iterable
-    {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkTo(SomeCrudController::class, 'The Label', 'fas fa-list');
-    }
+  public function configureMenuItems(): iterable
+{
+    yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-tachometer-alt');
+
+    yield MenuItem::section('Catalogue');
+    yield MenuItem::linkTo(BookCrudController::class, 'Livres', 'fa fa-book');
+    yield MenuItem::linkTo(AuthorCrudController::class, 'Auteurs', 'fa fa-pen-nib');
+    yield MenuItem::linkTo(CategoryCrudController::class, 'Catégories', 'fa fa-tag');
+
+    yield MenuItem::section('Utilisateurs & Emprunts');
+    yield MenuItem::linkTo(UserCrudController::class, 'Utilisateurs', 'fa fa-users');
+    yield MenuItem::linkTo(BorrowingCrudController::class, 'Emprunts', 'fa fa-book-reader');
+
+    yield MenuItem::section('Navigation');
+    yield MenuItem::linkToRoute('Retour au site', 'fa fa-arrow-left', 'app_home');
+}
 }
